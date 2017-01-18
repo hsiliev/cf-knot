@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const debug = require('debug')('cf-knot:createdb');
+const mysql = require('mysql');
+
+const getConnectionInfo = () => {
+  const services = JSON.parse(process.env.VCAP_SERVICES);
+  const serviceConfig = services[0];
+  const instance = serviceConfig[0];
+  return {
+    host: instance.credentials.hostname,
+    port: instance.credentials.port,
+    user: instance.credentials.username,
+    password: instance.credentials.password,
+    database: instance.credentials.name
+  };
+};
+
+const createData = () => {
+  const connection = mysql.createConnection(getConnectionInfo());
+  connection.connect();
+
+  connection.query(`CREATE TABLE data (
+  id int(11) NOT NULL AUTO_INCREMENT,
+    name varchar(50),
+    location varchar(50),
+    PRIMARY KEY (id)
+  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;`,
+    function (error, results, fields) {
+    if (error) throw error;
+    console.log('DB created');
+  });
+
+  const employee = {name: 'Dundee', location: 'Australia'};
+  connection.query('INSERT INTO data SET ?', employee, function(err,res){
+    if(err) throw err;
+    console.log('First employee added');
+  });
+
+  connection.end();
+};
+
+createData();
