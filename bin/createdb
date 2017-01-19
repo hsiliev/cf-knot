@@ -3,21 +3,13 @@
 const debug = require('debug')('cf-knot:createdb');
 const mysql = require('mysql');
 
-const getConnectionInfo = () => {
-  const services = JSON.parse(process.env.VCAP_SERVICES);
-  const serviceConfig = services[0];
-  const instance = serviceConfig[0];
-  return {
-    host: instance.credentials.hostname,
-    port: instance.credentials.port,
-    user: instance.credentials.username,
-    password: instance.credentials.password,
-    database: instance.credentials.name
-  };
-};
+const service = require('../lib/service');
 
 const createData = () => {
-  const connection = mysql.createConnection(getConnectionInfo());
+  const info = service.getConnectionInfo();
+
+  debug('Connecting to DB with %o...', info);
+  const connection = mysql.createConnection(info);
   connection.connect();
 
   connection.query(`CREATE TABLE data (

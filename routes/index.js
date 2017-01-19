@@ -1,40 +1,58 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
+const debug = require('debug')('cf-knot:index');
 
-const getConnectionInfo = () => {
-  const services = JSON.parse(process.env.VCAP_SERVICES);
-  const serviceConfig = services[0];
-  const instance = serviceConfig[0];
-  return {
-    host: instance.credentials.hostname,
-    port: instance.credentials.port,
-    user: instance.credentials.username,
-    password: instance.credentials.password,
-    database: instance.credentials.name
-  };
-};
+const service = require('../lib/service');
 
 const getData = (cb) => {
-  const connection = mysql.createConnection(getConnectionInfo());
-  connection.connect();
+  const info = service.getConnectionInfo();
 
-  connection.query('SELECT * FROM `data`', function (error, results, fields) {
-    if (error) throw error;
-    cb(results);
+  debug('Connecting to DB with %o...', info);
+  const connection = mysql.createConnection(info);
+  connection.connect((error) => {
+    if (error) {
+      debug('Failed to connect with %o', error);
+      cb(error);
+      return;
+    }
+    debug('Connection established');
+
+    debug('Selecting data ...');
+    try {
+      connection.query('SELECT * FROM `data`', function (error, results, fields) {
+        debug('Selected data %o', results);
+        cb(error, results);
+      });
+    } catch (e) {
+      cb(e);
+    }
+
+    debug('Closing connection ...');
+    connection.end();
   });
 
-  connection.end();
 };
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  getData((data) => {
+  getData((error, data) => {
+    if (error) {
+      res.locals.message = error.message;
+      res.locals.error = error;
+
+      // render the error page
+      res.status(error.status || 500);
+      res.render('error');
+
+      return;
+    }
+
     res.render('index', {
       title: 'cf-knot',
       data: data
     });
-  })
+  });
 });
 
 module.exports = router;

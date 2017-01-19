@@ -1,0 +1,8 @@
+applications:
+- name: knot
+  instances: 1
+  #random-route: true
+  services:
+  - db
+  env:
+    DEBUG: cf-knot*
