@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+const debug = require('debug')('cf-knot:updatedb');
+const mysql = require('mysql');
+
+const service = require('../lib/service');
+
+const updateData = () => {
+  const info = service.getConnectionInfo();
+
+  debug('Connecting to DB with %o...', info);
+  const connection = mysql.createConnection(info);
+  connection.connect();
+
+  const sql = "INSERT INTO data (name, location) VALUES ?";
+  const values = [
+    ['Cheburashka', 'Russia'],
+    ['Pooh', 'USA'],
+    ['Balgar', 'Bulgaria'],
+    ['Maya', 'Germany']
+  ];
+  connection.query(sql, [values], function(err){
+    if(err) throw err;
+    console.log('Employees added');
+  });
+
+  connection.end();
+};
+
+updateData();
