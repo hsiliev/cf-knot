@@ -6,6 +6,10 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
 
 ## Running the app
 
+### Pre-runtime hooks
+
+Pre-Diego apps used [pre-runtime hooks](https://docs.cloudfoundry.org/devguide/deploy-apps/deploy-app.html#profile) to do stuff before the app was started.
+
 0. Clone the project 
 
   ```bash
@@ -18,10 +22,6 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   ```bash
   cf create-service p-mysql 10mb db
   ```
-
-### Pre-runtime hooks
-
-Pre-Diego apps used [pre-runtime hooks](https://docs.cloudfoundry.org/devguide/deploy-apps/deploy-app.html#profile) to do stuff before the app was started.
 
 0. Create MySQL service
 
