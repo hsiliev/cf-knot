@@ -13,6 +13,12 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   git clone https://github.com/hsiliev/cf-knot
   ```
 
+0. Create MySQL service
+
+  ```bash
+  cf create-service p-mysql 10mb db
+  ```
+
 0. Deploy
 
   ```bash
@@ -21,13 +27,8 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   cf login -a api.bosh-lite.com --skip-ssl-validation
   cf push
   ```
-
-0. Create MySQL service
-
-  ```bash
-  cf create-service p-mysql 10mb db
-  cf bind-service knot db
-  ```
+  
+  The application is automatically bound (via the manifest.yml) to the `db` service instance we created.
 
 0. Restart the application
 
