@@ -4,7 +4,7 @@ Cloud Foundry node.js application demonstrating the use of Diego tasks
 ## Prerequisites
 Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsiliev/cf-zoo).
 
-## How to run the app
+## Running the app
 
 0. Clone the project 
 
@@ -19,6 +19,16 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   cf create-service p-mysql 10mb db
   ```
 
+### Pre-runtime hooks
+
+Pre-Diego apps used [pre-runtime hooks](https://docs.cloudfoundry.org/devguide/deploy-apps/deploy-app.html#profile) to do stuff before the app was started.
+
+0. Create MySQL service
+
+  ```bash
+  cf create-service p-mysql 10mb db
+  ```
+  
 0. Deploy
 
   ```bash
@@ -30,24 +40,22 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   
   The application is automatically bound (via the manifest.yml) to the `db` service instance we created.
 
-0. Restart the application
-
-  ```bash
-  cf restart knot
-  ```
-
 0. Request the application
-  
-  At this point the application should output an error about missing table.
 
-0. Pouplate the application DB
+  The DB was populated by the pre-runtime hook we run in `.profile`. The application displays the data inserted by the `createdb` script.
 
-  We'll populate the DB with Diego task:
+### Tasks
+
+With Diego we can use [one-off tasks](https://docs.cloudfoundry.org/devguide/using-tasks.html).
+
+0. Add more data to DB
+
+  We'll update the DB with Diego task:
 
   ```bash
-  cf run-task knot "npm run createdb"
+  cf run-task knot "npm run updatedb"
   ```
 
 0. Request the app again
 
-  The application should now display the data inserted by the `createdb` task
+  The application should now display the new data inserted by the `updatedb` task.
