@@ -29,6 +29,12 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   cf bind-service knot db
   ```
 
+0. Restart the application
+
+  ```bash
+  cf restart knot
+  ```
+
 0. Request the application
   
   At this point the application should output an error about missing table.
