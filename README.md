@@ -30,9 +30,11 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   ```
 
 0. Request the application
+  
   At this point the application should output an error about missing table.
 
 0. Pouplate the application DB
+
   We'll populate the DB with Diego task:
 
   ```bash
@@ -40,4 +42,5 @@ Cloud Foundry with MySQL and Diego. You can use [cf-zoo](https://github.com/hsil
   ```
 
 0. Request the app again
+
   The application should now display the data inserted by the `createdb` task
