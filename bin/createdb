@@ -23,10 +23,16 @@ const createData = () => {
     console.log('DB created');
   });
 
-  const employee = {name: 'Dundee', location: 'Australia'};
-  connection.query('INSERT INTO data SET ?', employee, function(err,res){
+  const sql = "INSERT INTO data (name, location) VALUES ?";
+  const values = [
+    ['Dundee', 'Australia'],
+    ['Rambo', 'USA'],
+    ['Ganio', 'Bulgaria'],
+    ['Hans', 'Germany']
+  ];
+  connection.query(sql, [values], function(err){
     if(err) throw err;
-    console.log('First employee added');
+    console.log('Employees added');
   });
 
   connection.end();

@@ -1,4 +1,9 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-<p>Data: {{data}}</p>
+<p>Data:</p>
+<ul class="people_list">
+{{#each data}}
+  <li>#{{id}}: {{name}}, {{location}}</li>
+{{/each}}
+</ul>
