@@ -22,12 +22,6 @@ Pre-Diego apps used [pre-runtime hooks](https://docs.cloudfoundry.org/devguide/d
   ```bash
   cf create-service p-mysql 10mb db
   ```
-
-0. Create MySQL service
-
-  ```bash
-  cf create-service p-mysql 10mb db
-  ```
   
 0. Deploy
 
